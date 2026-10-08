@@ -126,7 +126,7 @@ public class GamePanel extends JPanel {
         g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
         camera.follow(player, world, getWidth(), getHeight());
         camera.apply(g);
-        // порядок важен: что нарисовано позже, то сверху
+        // что нарисовано позже, то сверху
         world.draw(g);
         npc.draw(g, !dialogueActive && npc.isNear(player));
         player.draw(g);
