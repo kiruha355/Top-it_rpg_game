@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 
 public class World {
     private final BufferedImage background;
+    // стены подобраны вручную по картинке: здание, деревья, самолёт
     private final Rectangle[] obstacles = {
         new Rectangle(0, 0, 1536, 416),
         new Rectangle(502, 416, 496, 35),
@@ -18,6 +19,7 @@ public class World {
     };
 
     public World() {
+        // путь от папки проекта, поэтому игру надо запускать оттуда
         Path imagePath = Path.of("assets", "maps", "university-courtyard.png");
         try {
             background = ImageIO.read(imagePath.toFile());
@@ -32,6 +34,7 @@ public class World {
     public double spawnX() { return width() / 2.0; }
     public double spawnY() { return height() * 0.66; }
 
+    // можно ли поставить квадрат с центром (x, y): не вылезает за карту и не задевает стены
     public boolean canStand(double x, double y, int halfSize) {
         if (x - halfSize < 0 || y - halfSize < 0 || x + halfSize > width() || y + halfSize > height()) return false;
         for (Rectangle obstacle : obstacles) {

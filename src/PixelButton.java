@@ -35,6 +35,8 @@ public class PixelButton extends JButton {
         boolean pressed = getModel().isPressed() && getModel().isArmed();
         int width = getWidth();
         int height = getHeight();
+        // кнопка рисуется слоями: рамка, тень, лицо, узор, текст
+        // при нажатии светлая и тёмная стороны меняются местами, и кнопка выглядит вдавленной
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, width, height);
         g.setColor(pressed ? DARK_EDGE : highlighted ? HOVER_EDGE : LIGHT_EDGE);
@@ -44,6 +46,7 @@ public class PixelButton extends JButton {
         g.fillRect(width - 6, 4, 4, height - 6);
         g.setColor(highlighted ? HOVER_FACE : FACE);
         g.fillRect(6, 6, width - 12, height - 12);
+        // узор по формуле, а не случайный, чтобы не мерцал между кадрами
         g.setColor(highlighted ? HOVER_GRAIN : GRAIN);
         for (int row = 0; row < (height - 12) / 4; row++) {
             for (int col = 0; col < (width - 12) / 4; col++) {

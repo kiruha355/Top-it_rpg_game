@@ -20,9 +20,9 @@ public class GamePanel extends JPanel {
     private final Npc npc = new Npc(1010, 620);
     private final PixelButton talk = new PixelButton("Диалог");
     private final DialoguePanel dialoguePanel = new DialoguePanel(() -> closeDialogue());
-    private boolean dialogueActive;
+    private boolean dialogueActive; // true, пока идёт разговор, игрок в это время стоит
     private final Timer timer;
-    private final Set<String> held = new HashSet<>();
+    private final Set<String> held = new HashSet<>(); // клавиши, зажатые прямо сейчас
     private long previousTime = System.nanoTime();
 
     public GamePanel() {
@@ -41,6 +41,7 @@ public class GamePanel extends JPanel {
             @Override public void focusLost(FocusEvent event) { held.clear(); }
         });
         setFocusable(true);
+        // игровой цикл: update() примерно 60 раз в секунду
         timer = new Timer(16, event -> update());
     }
 
@@ -82,6 +83,7 @@ public class GamePanel extends JPanel {
         super.removeNotify();
     }
 
+    // здесь только запоминаем, какие клавиши зажаты. Двигается игрок в update()
     private void bind(String key, boolean released) {
         String action = (released ? "released " : "pressed ") + key;
         getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(action), action);
@@ -101,10 +103,13 @@ public class GamePanel extends JPanel {
     private boolean down(String letter, String arrow) { return held.contains(letter) || held.contains(arrow); }
 
     private void update() {
+        // сколько секунд прошло с прошлого кадра. Не больше 0.05,
+        // чтобы после подвисания игрок не проскочил сквозь стену
         long now = System.nanoTime();
         double seconds = Math.min((now - previousTime) / 1_000_000_000.0, 0.05);
         previousTime = now;
         if (!isShowing() || !javax.swing.SwingUtilities.getWindowAncestor(this).isFocused()) held.clear();
+        // направление по каждой оси: -1, 0 или 1. Ось y направлена вниз
         double dx = (down("D", "RIGHT") ? 1 : 0) - (down("A", "LEFT") ? 1 : 0);
         double dy = (down("S", "DOWN") ? 1 : 0) - (down("W", "UP") ? 1 : 0);
         if (!dialogueActive) player.move(world, dx, dy, seconds);
@@ -114,11 +119,14 @@ public class GamePanel extends JPanel {
 
     @Override protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
+        // рисуем на копии, чтобы сдвиг камеры не задел кнопки
         Graphics2D g = (Graphics2D) graphics.create();
+        // без сглаживания, чтобы пиксели были чёткими
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
         g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
         camera.follow(player, world, getWidth(), getHeight());
         camera.apply(g);
+        // порядок важен: что нарисовано позже, то сверху
         world.draw(g);
         npc.draw(g, !dialogueActive && npc.isNear(player));
         player.draw(g);

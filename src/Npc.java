@@ -11,6 +11,7 @@ public class Npc {
 
     public Npc(double x, double y) { this.x = x; this.y = y; }
 
+    // сравниваем квадраты расстояний, так не нужно считать корень
     public boolean isNear(Player player) {
         double dx = player.x() - x;
         double dy = player.y() - y;
@@ -24,6 +25,7 @@ public class Npc {
         g.fillRect(px - SIZE / 2 - 2, py - SIZE / 2 - 2, SIZE + 4, SIZE + 4);
         g.setColor(COLOR);
         g.fillRect(px - SIZE / 2, py - SIZE / 2, SIZE, SIZE);
+        // облачко "Привет!" над головой
         if (showGreeting) {
             int labelWidth = greeting.width(2);
             int left = px - labelWidth / 2 - 8;

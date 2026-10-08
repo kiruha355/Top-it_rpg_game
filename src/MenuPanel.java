@@ -23,6 +23,7 @@ public class MenuPanel extends JPanel {
         super.paintComponent(g);
         int x = (getWidth() - title.width(TITLE_SCALE)) / 2;
         int y = getHeight() / 2 - 130;
+        // сначала тень со сдвигом, потом сам текст поверх
         g.setColor(TITLE_SHADOW);
         title.draw(g, x + TITLE_SCALE, y + TITLE_SCALE, TITLE_SCALE);
         g.setColor(TITLE_COLOR);

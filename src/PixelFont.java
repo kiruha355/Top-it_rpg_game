@@ -5,6 +5,7 @@ import java.util.Map;
 public final class PixelFont {
     private static final int WIDTH = 5;
     private static final int HEIGHT = 7;
+    // каждая буква это сетка 5x7, где 1 закрашенный пиксель. Здесь только буквы, которые сейчас нужны
     private static final Map<Character, String[]> GLYPHS = Map.ofEntries(
         Map.entry('И', new String[]{"10001", "10001", "10011", "10101", "11001", "10001", "10001"}),
         Map.entry('Г', new String[]{"11111", "10000", "10000", "10000", "10000", "10000", "10000"}),
@@ -33,6 +34,7 @@ public final class PixelFont {
         }
     }
 
+    // на букву 5 пикселей и 1 на промежуток, после последней промежутка нет
     public int width(int scale) { return (letters.length * (WIDTH + 1) - 1) * scale; }
     public int height(int scale) { return HEIGHT * scale; }
 

@@ -20,6 +20,7 @@ public class DialoguePanel extends JPanel {
 
     @Override protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        // белая рамка, слева портрет NPC, справа текст реплики
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, getWidth(), 3);
         g.fillRect(0, getHeight() - 3, getWidth(), 3);
