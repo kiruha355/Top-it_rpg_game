@@ -83,7 +83,7 @@ public class GamePanel extends JPanel {
         super.removeNotify();
     }
 
-    // здесь только запоминаем, какие клавиши зажаты. Двигается игрок в update()
+    // здесь только запоминаем, какие клавиши зажаты, двигается игрок в update()
     private void bind(String key, boolean released) {
         String action = (released ? "released " : "pressed ") + key;
         getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(action), action);
@@ -103,13 +103,13 @@ public class GamePanel extends JPanel {
     private boolean down(String letter, String arrow) { return held.contains(letter) || held.contains(arrow); }
 
     private void update() {
-        // сколько секунд прошло с прошлого кадра. Не больше 0.05,
+        // сколько секунд прошло с прошлого кадра, не больше 0.05,
         // чтобы после подвисания игрок не проскочил сквозь стену
         long now = System.nanoTime();
         double seconds = Math.min((now - previousTime) / 1_000_000_000.0, 0.05);
         previousTime = now;
         if (!isShowing() || !javax.swing.SwingUtilities.getWindowAncestor(this).isFocused()) held.clear();
-        // направление по каждой оси: -1, 0 или 1. Ось y направлена вниз
+        // направление по каждой оси: -1, 0 или 1, ось y направлена вниз
         double dx = (down("D", "RIGHT") ? 1 : 0) - (down("A", "LEFT") ? 1 : 0);
         double dy = (down("S", "DOWN") ? 1 : 0) - (down("W", "UP") ? 1 : 0);
         if (!dialogueActive) player.move(world, dx, dy, seconds);
