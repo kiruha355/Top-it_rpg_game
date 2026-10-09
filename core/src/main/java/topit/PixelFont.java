@@ -1,4 +1,6 @@
-import java.awt.Graphics;
+package topit;
+
+import com.badlogic.gdx.graphics.Color;
 import java.util.Locale;
 import java.util.Map;
 
@@ -38,11 +40,14 @@ public final class PixelFont {
     public int width(int scale) { return (letters.length * (WIDTH + 1) - 1) * scale; }
     public int height(int scale) { return HEIGHT * scale; }
 
-    public void draw(Graphics g, int x, int y, int scale) {
+    // x, y это левый нижний угол текста, строки буквы идут сверху вниз
+    public void draw(Painter painter, float x, float y, int scale, Color color) {
         for (String[] letter : letters) {
             for (int row = 0; row < HEIGHT; row++) {
                 for (int col = 0; col < WIDTH; col++) {
-                    if (letter[row].charAt(col) == '1') g.fillRect(x + col * scale, y + row * scale, scale, scale);
+                    if (letter[row].charAt(col) == '1') {
+                        painter.fillRect(x + col * scale, y + (HEIGHT - 1 - row) * scale, scale, scale, color);
+                    }
                 }
             }
             x += (WIDTH + 1) * scale;

@@ -1,4 +1,5 @@
 .tools/
+.gradle/
 build/
 output/imagegen/
 *.class
